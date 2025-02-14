@@ -6,14 +6,16 @@ date_default_timezone_set('Europe/Berlin');
 // Define currencies that should *not* be included in the list
 $excludedCurrencies = ['bits', 'sats'];
 
+require_once __DIR__ . '/cache.php';
+
 // Fetch JSON data from a file and decode it
 function fetchJson($filename) {
     return json_decode(file_get_contents($filename), true);
 }
 
-function fetchCache(string $key, string $url)
+function fetchCache(string $key, string $url, FileCache $cache)
 {
-    return apcu_entry($key, function() use ($url) {
+    return $cache->getOrSet($key, function() use ($url) {
         return makeApiRequest($url);
     }, 60);
 }
@@ -78,8 +80,9 @@ function fetchAvailableCurrencies() {
 
 // Fetch currency data from CoinGecko API
 function fetchCurrencyData($currencies) {
+    $cache = new FileCache(__DIR__ . '/cache');
     $apiUrl = getCoinGeckoApiUrl('simple/price', ['ids' => 'monero', 'vs_currencies' => implode(',', array_map('strtolower', $currencies))]);
-    return fetchCache('currency_data', $apiUrl);
+    return fetchCache('currency_data', $apiUrl, $cache);
 }
 
 $currencyFile = 'coingecko.json';
