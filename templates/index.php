@@ -1,7 +1,5 @@
 <!DOCTYPE html>
-<html lang="<?php echo $lang_meta; ?>" <?php if ($rtl) {
-                                            echo 'dir="rtl"';
-                                        } ?>>
+<html lang="<?php echo $lang_meta  ?>" <?= $rtl ? 'dir="rtl"' : '' ?>>
 
 <head>
     <meta charset="utf-8" />
@@ -33,7 +31,7 @@
     <link rel="apple-touch-icon-precomposed" sizes="32x32" href="img/favicon-32x32.png" />
     <link rel="apple-touch-icon-precomposed" sizes="16x16" href="img/favicon-16x16.png" />
     <link rel="apple-touch-startup-image" href="img/favicon-196x196.png" />
-    
+
     <link rel="icon" type="image/png" href="img/favicon-196x196.png" sizes="196x196" />
     <link rel="icon" type="image/png" href="img/favicon-152x152.png" sizes="152x152" />
     <link rel="icon" type="image/png" href="img/favicon-144x144.png" sizes="144x144" />

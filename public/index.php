@@ -4,23 +4,24 @@ header("Cache-Control: no-store, no-cache, must-revalidate, max-age=0");
 header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
+$COINGECKO_JSON_PATH = dirname(__DIR__) . '/storage/coingecko.json';
+
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $currentUrl = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $parentUrl = dirname($currentUrl);
 
 // Get currency data from JSON
-if (!file_exists('coingecko.json')) {
-    // Special case: First run.
-    exec('php coingecko.php');
+if (!file_exists($COINGECKO_JSON_PATH)) {
+    `php coingecko.php`;
     sleep(1);
 }
 
-$api_cg = json_decode(file_get_contents('coingecko.json'), true);
+$api_cg = json_decode(file_get_contents($COINGECKO_JSON_PATH), true);
 
 // Configuration file
 $config = [];
-if (file_exists('config.php')) {
-    $config = require_once 'config.php';
+if (file_exists(dirname(__DIR__) . '/config.php')) {
+    $config = require_once '../config.php';
 }
 
 $display_servers_guru = isset($config['servers_guru']) && $config['servers_guru'] === true;
@@ -71,8 +72,8 @@ $language_code = explode('-', $lang)[0];
 $language_files = ["en", $language_code, $lang];
 
 foreach ($language_files as $language_file) {
-    if (file_exists('lang/' . $language_file . '.php')) {
-        require_once 'lang/' . $language_file . '.php';
+    if (file_exists('../lang/' . $language_file . '.php')) {
+        require_once '../lang/' . $language_file . '.php';
     }
 }
 
@@ -106,5 +107,4 @@ foreach (array_reverse($preferred_currencies) as $currency) {
 }
 
 // Output the HTML
-require_once 'templates/index.php';
-?>
+require_once '../templates/index.php';

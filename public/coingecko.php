@@ -6,22 +6,24 @@ date_default_timezone_set('Europe/Berlin');
 // Define currencies that should *not* be included in the list
 $excludedCurrencies = ['bits', 'sats'];
 
-require_once __DIR__ . '/cache.php';
+require_once '../lib/cache.php';
 
 // Fetch JSON data from a file and decode it
-function fetchJson($filename) {
+function fetchJson($filename)
+{
     return json_decode(file_get_contents($filename), true);
 }
 
 function fetchCache(string $key, string $url, FileCache $cache)
 {
-    return $cache->getOrSet($key, function() use ($url) {
+    return $cache->getOrSet($key, function () use ($url) {
         return makeApiRequest($url);
     }, 60);
 }
 
 // Make an API request and return the JSON response
-function makeApiRequest($url) {
+function makeApiRequest($url)
+{
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $json = curl_exec($ch);
@@ -36,15 +38,19 @@ function makeApiRequest($url) {
 }
 
 // Get CoinGecko key URL parameter
-function getCoinGeckoApiUrl($path, $params = []) {
-    $secrets = require_once 'secrets.php';
-    $key = $secrets['coingecko_api_key'];
+function getCoinGeckoApiUrl($path, $params = [])
+{
+    $secrets = require '../secrets.php';
     $demo = $secrets['coingecko_key_is_demo'];
 
-    $paramName = $demo ? 'x_cg_demo_api_key' : 'x_cg_pro_api_key';
+    if ($secrets['use_api_key'] === true) {
+        $key = $secrets['coingecko_api_key'];
+        $paramName = $demo ? 'x_cg_demo_api_key' : 'x_cg_pro_api_key';
+        $params[$paramName] = $key;
+    }
+
     $baseUrl = $demo ? "https://api.coingecko.com/api/v3/" : "https://pro-api.coingecko.com/api/v3/";
 
-    $params[$paramName] = $key;
     $url = $baseUrl . $path;
 
     if (!empty($params)) {
@@ -58,8 +64,9 @@ $currentTime = time();
 
 // Fetch list of available currencies from CoinGecko API
 // Available currencies are cached for 24 hours
-function fetchAvailableCurrencies() {
-    $cacheFile = 'coingecko-currencies.json';
+function fetchAvailableCurrencies()
+{
+    $cacheFile = dirname(__DIR__) . '/storage/coingecko-currencies.json';
     $cacheTime = 86400;
 
     // Return cached data if it exists and is less than 24 hours old
@@ -75,21 +82,23 @@ function fetchAvailableCurrencies() {
         return $data;
     }
 
-    return null;
+    return $data;
 }
 
 // Fetch currency data from CoinGecko API
-function fetchCurrencyData($currencies) {
-    $cache = new FileCache(__DIR__ . '/cache');
+function fetchCurrencyData($currencies)
+{
+    $cache = new FileCache(dirname(__DIR__) . '/storage/cache');
     $apiUrl = getCoinGeckoApiUrl('simple/price', ['ids' => 'monero', 'vs_currencies' => implode(',', array_map('strtolower', $currencies))]);
     return fetchCache('currency_data', $apiUrl, $cache);
 }
 
-$currencyFile = 'coingecko.json';
-$originalFile = 'coingecko-original.json';
+$currencyFile = dirname(__DIR__) . '/storage/coingecko.json';
+$originalFile = dirname(__DIR__) . '/storage/coingecko-original.json';
 
 // Function to process currency data
-function processCurrencyData($availableCurrencies, $previousData, $currentTime, $excludedCurrencies) {
+function processCurrencyData($availableCurrencies, $previousData, $currentTime, $excludedCurrencies)
+{
     // Remove excluded currencies
     $availableCurrencies = array_diff($availableCurrencies, $excludedCurrencies);
     $currencies = array_map('strtoupper', $availableCurrencies);
@@ -116,7 +125,7 @@ function processCurrencyData($availableCurrencies, $previousData, $currentTime, 
     return null;
 }
 
-$previousData = fetchJson($currencyFile);
+$previousData = file_exists($currencyFile) ? fetchJson($currencyFile) : ["time" => 0];
 $output = $previousData;
 
 // Check if five seconds have passed since the last update

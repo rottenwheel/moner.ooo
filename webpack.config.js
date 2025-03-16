@@ -10,7 +10,7 @@ module.exports = {
   entry: './src/js/main.js',
   output: {
     filename: 'main.js',
-    path: path.resolve(__dirname, 'js'),
+    path: path.resolve(__dirname, 'public/js'),
   },
   module: {
     rules: [
@@ -29,7 +29,7 @@ module.exports = {
     }),
     new PurgeCSSPlugin({
       paths: glob.sync([
-        path.join(__dirname, 'index.php'),
+        path.join(__dirname, 'public/index.php'),
         path.join(__dirname, 'src/js/*.js'),
         path.join(__dirname, 'templates/*.php'),
       ]),

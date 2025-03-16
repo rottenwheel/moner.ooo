@@ -1,11 +1,13 @@
 <?php
 
 declare(strict_types=1);
-class FileCache {
+class FileCache
+{
     private $cacheDir;
     private $defaultExpiration;
 
-    public function __construct($cacheDir = 'cache', $defaultExpiration = 60) {
+    public function __construct($cacheDir = '../storage/cache', $defaultExpiration = 60)
+    {
         $this->cacheDir = $cacheDir;
         $this->defaultExpiration = $defaultExpiration;
         // Create the cache directory if it doesn't exist

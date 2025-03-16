@@ -6,13 +6,14 @@
 /node_modules/
 
 # Coingecko export data
-/coingecko.json
-/coingecko-original.json
-/coingecko-currencies.json
+/storage/coingecko.json
+/storage/coingecko-original.json
+/storage/coingecko-currencies.json
+/storage/cache/
 
 # Secret files
 /secrets.php
 
 # Compiled files
-/js/
-/css/
+/public/js/
+/public/css/
