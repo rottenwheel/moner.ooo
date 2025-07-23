@@ -72,7 +72,7 @@
                                     echo "<tr>";
                                     foreach ($chunk as $currency) {
                                         $currencyName = isset(${"l_" . strtolower($currency)}) ? ${"l_" . strtolower($currency)} : $currency;
-                                        echo "<td><a href=\"/?in={$currency}\" class=\"btn btn-light fiat-btn\" title=\"{$currencyName}\" data-toggle=\"tooltip\" data-bs-html=\"true\" data-placement=\"top\">{$currency}</a></td>";
+                                        echo "<td><a href=\"/?in={$currency}&data_source={$data_source}\" class=\"btn btn-light fiat-btn\" title=\"{$currencyName}\" data-toggle=\"tooltip\" data-bs-html=\"true\" data-placement=\"top\">{$currency}</a></td>";
                                     }
                                     echo "</tr>";
                                     echo "<tr style=\"display:none;\">";
@@ -84,11 +84,36 @@
                                 ?>
                             </tbody>
                         </table>
+                        <div class="data-source-selector text-center mb-3">
+                            <span class="text-white">Data source:</span>
+                            <br />
+                            <div class="btn-group btn-group-sm data-source-btn" role="group" aria-label="Data source selection">
+                                <a href="?data_source=coingecko<?php echo isset($_GET['in']) ? '&in=' . $_GET['in'] : ''; ?>"
+                                    class="btn <?php echo $data_source == 'coingecko' ? 'btn-primary' : 'btn-outline-secondary'; ?>">
+                                    CoinGecko
+                                </a>
+                                <a href="?data_source=haveno<?php echo isset($_GET['in']) ? '&in=' . $_GET['in'] : ''; ?>"
+                                    class="btn <?php echo $data_source == 'haveno' ? 'btn-primary' : 'btn-outline-secondary'; ?>">
+                                    Haveno.markets
+                                </a>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <hr class="gold" />
 
+                <?php
+                if (strtolower(isset($_GET["in"]) && $_GET["in"] != $xmr_in)) {
+                ?>
+                    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+                        <strong>Currency Changed:</strong> <?php echo htmlspecialchars($_GET["in"]); ?> is not available in this data source. Switched to <?php echo $xmr_in; ?>.
+                    </div>
+                <?php
+                }
+                ?>
+
                 <form method="get" action="">
+                    <input type="hidden" name="data_source" value="<?php echo $data_source; ?>" />
                     <div class="input-group mb-3">
                         <button id="copyXMRBtn" class="btn-outline-secondary input-group-text clipboard-copy" title="<?php echo $clipboard_copy_tooltip; ?>" data-toggle="tooltip" data-bs-html="true" data-placement="top">&#128203;</button>
                         <input class="form-control" id="xmrInput" name="xmr" type="text" spellcheck="false" autocorrect="off" inputmode="numeric" aria-label="<?php echo $l_xmrInput; ?>" aria-describedby="basic-addon-xmr" value="<?php echo $xmr_value; ?>">

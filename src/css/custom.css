@@ -82,6 +82,10 @@ input.form-control {
     vertical-align: super;
 }
 
+a {
+    display: inline flow-root;
+}
+
 p {
     color: #cecece;
 }
@@ -162,4 +166,34 @@ p {
 
 #donation-qr-toggle:checked ~ #donation-qr-container {
     display: flex;
+}
+
+.data-source-selector {
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.data-source-selector .btn-group {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.data-source-selector .btn {
+    font-size: 0.75rem;
+    padding: 0.25rem 0.5rem;
+    font-weight: 600;
+}
+
+.data-source-selector .btn-primary {
+    background-color: #ff6600;
+    border-color: #ff6600;
+}
+
+.data-source-selector .btn-outline-secondary {
+    color: #e9ecef;
+    border-color: #4d4d4d;
+}
+
+.data-source-selector .btn-outline-secondary:hover {
+    background-color: #4d4d4d;
+    color: white;   
 }

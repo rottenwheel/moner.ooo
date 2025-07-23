@@ -5,6 +5,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 $COINGECKO_JSON_PATH = dirname(__DIR__) . '/storage/coingecko.json';
+$HAVENO_JSON_PATH = dirname(__DIR__) . '/storage/haveno.json';
 
 $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https://" : "http://";
 $currentUrl = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -12,17 +13,37 @@ $parentUrl = dirname($currentUrl);
 
 // Get currency data from JSON
 `php coingecko.php`;
-
-if (!file_exists($COINGECKO_JSON_PATH)) {
-    sleep(1);
-}
-
-$api_cg = json_decode(file_get_contents($COINGECKO_JSON_PATH), true);
+`php haveno.php`;
 
 // Configuration file
 $config = [];
 if (file_exists(dirname(__DIR__) . '/config.php')) {
     $config = require_once '../config.php';
+}
+
+// Handle data source selection from URL parameter
+if (isset($_GET['data_source']) && in_array($_GET['data_source'], ['coingecko', 'haveno'])) {
+    $data_source = $_GET['data_source'];
+} else {
+    $data_source = isset($config['data_source']) ? $config['data_source'] : 'coingecko';
+}
+
+// Get currency data from JSON based on data source
+if ($data_source === 'haveno') {
+    if (!file_exists($HAVENO_JSON_PATH)) {
+        sleep(1);
+    }
+    $api_data = json_decode(file_get_contents($HAVENO_JSON_PATH), true);
+    $source_name = 'Haveno.markets';
+    $source_url = 'https://haveno.markets';
+} else {
+    // Default to CoinGecko
+    if (!file_exists($COINGECKO_JSON_PATH)) {
+        sleep(1);
+    }
+    $api_data = json_decode(file_get_contents($COINGECKO_JSON_PATH), true);
+    $source_name = 'CoinGecko';
+    $source_url = 'https://www.coingecko.com/en/coins/monero';
 }
 
 $display_servers_guru = isset($config['servers_guru']) && $config['servers_guru'] === true;
@@ -32,17 +53,46 @@ $github_url = isset($config['github_url']) ? $config['github_url'] : 'https://gi
 $footer_html = isset($config['footer_html']) ? $config['footer_html'] : '';
 
 // Extract the keys
-$currencies = array_map('strtoupper', array_keys($api_cg));
+$currencies = array_map('strtoupper', array_keys($api_data));
 
 // Fetch the time of the last API data update
-$time_cg = date("H:i:s", $api_cg['time']);
-$time = $time_cg;
+$time = date("H:i:s", $api_data['time']);
 unset($currencies[array_search('TIME', $currencies)]);
+
+// Order preferred currencies to the top
+foreach (array_reverse($preferred_currencies) as $currency) {
+    $currency = strtoupper($currency);
+    if (($key = array_search($currency, $currencies)) !== false) {
+        unset($currencies[$key]);
+        array_unshift($currencies, $currency);
+    }
+}
+
+// Check if the selected currency is available in the current data source
+$xmr_in = isset($_GET["in"]) ? strtoupper(string: htmlspecialchars($_GET["in"])) : 'EUR';
+
+if (!in_array($xmr_in, $currencies)) {
+    // If not available, fall back to a default currency that should be available in both sources
+    $fallback_currencies = ['USD', 'BTC', 'EUR'];
+    foreach ($fallback_currencies as $fallback) {
+        if (in_array($fallback, $currencies)) {
+            $xmr_in = $fallback;
+            break;
+        }
+    }
+    // If none of the fallbacks are available, just use the first available currency
+    if (!in_array($xmr_in, $currencies)) {
+        $xmr_in = $currencies[0];
+    }
+}
 
 // Populate exchange rates
 $exchangeRates = [];
 foreach ($currencies as $currency) {
-    $exchangeRates[$currency] = $api_cg[strtolower($currency)]['lastValue'];
+    $currencyLower = strtolower($currency);
+    if (isset($api_data[$currencyLower]) && isset($api_data[$currencyLower]['lastValue'])) {
+        $exchangeRates[$currency] = $api_data[$currencyLower]['lastValue'];
+    }
 }
 
 // Get the primary language from the browser
@@ -98,14 +148,9 @@ $xmr_value = number_format($xmr_value, 12);
 
 $fiat_value = strtr($fiat_value, ",", " ");
 
-// Order preferred currencies to the top
-foreach (array_reverse($preferred_currencies) as $currency) {
-    $currency = strtoupper($currency);
-    if (($key = array_search($currency, $currencies)) !== false) {
-        unset($currencies[$key]);
-        array_unshift($currencies, $currency);
-    }
-}
+// Include the data source in the info text
+$info = str_replace('CoinGecko', $source_name, $info);
+$info = str_replace('https://www.coingecko.com/en/coins/monero', $source_url, $info);
 
 // Output the HTML
 require_once '../templates/index.php';

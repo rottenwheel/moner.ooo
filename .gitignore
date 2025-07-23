@@ -14,6 +14,10 @@
 # Secret files
 /secrets.php
 
+# Haveno.markets data
+/storage/haveno.json
+/storage/haveno.json.bak
+
 # Compiled files
 /public/js/
 /public/css/
