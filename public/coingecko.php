@@ -94,6 +94,7 @@ function fetchCurrencyData($currencies)
 }
 
 $currencyFile = dirname(__DIR__) . '/storage/coingecko.json';
+$currencyFileLock = dirname(__DIR__) . '/storage/coingecko.json.lock';
 $originalFile = dirname(__DIR__) . '/storage/coingecko-original.json';
 
 // Function to process currency data
@@ -128,8 +129,16 @@ function processCurrencyData($availableCurrencies, $previousData, $currentTime, 
 $previousData = file_exists($currencyFile) ? fetchJson($currencyFile) : ["time" => 0];
 $output = $previousData;
 
-// Check if five seconds have passed since the last update
-if (($currentTime - $previousData['time']) >= 5) {
+// Check if enough time has passed since the last update
+if (($currentTime - $previousData['time']) >= 268.68) {
+
+    // lock to avoid issuing multiple requests at once
+    while (1) {
+        $currencyFileLockHandle = fopen($currencyFileLock, 'x');
+        if ($currencyFileLockHandle != false) break;
+        usleep(50000);
+    }
+
     $availableCurrencies = fetchAvailableCurrencies();
     if ($availableCurrencies !== null) {
         $output = processCurrencyData($availableCurrencies, $previousData, $currentTime, $excludedCurrencies);
@@ -140,6 +149,9 @@ if (($currentTime - $previousData['time']) >= 5) {
             file_put_contents($originalFile, json_encode($output, JSON_PRETTY_PRINT));
         }
     }
+
+    fclose($currencyFileLockHandle);
+    unlink($currencyFileLock);
 }
 
 // Output the data
