@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/Berlin');
 // Define currencies that should *not* be included in the list
 $excludedCurrencies = ['bits', 'sats'];
 
-require_once '../lib/cache.php';
+require_once dirname(__DIR__) . '/lib/cache.php';
 
 // Fetch JSON data from a file and decode it
 function fetchJson($filename)
@@ -40,7 +40,7 @@ function makeApiRequest($url)
 // Get CoinGecko key URL parameter
 function getCoinGeckoApiUrl($path, $params = [])
 {
-    $secrets = require '../secrets.php';
+    $secrets = require dirname(__DIR__) . '/secrets.php';
     $demo = $secrets['coingecko_key_is_demo'];
 
     if ($secrets['use_api_key'] === true) {
