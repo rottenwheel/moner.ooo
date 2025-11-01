@@ -11,10 +11,6 @@ $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVE
 $currentUrl = $protocol . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 $parentUrl = dirname($currentUrl);
 
-// Get currency data from JSON
-`php coingecko.php`;
-`php haveno.php`;
-
 // Configuration file
 $config = [];
 if (file_exists(dirname(__DIR__) . '/config.php')) {
@@ -31,7 +27,8 @@ if (isset($_GET['data_source']) && in_array($_GET['data_source'], ['coingecko', 
 // Get currency data from JSON based on data source
 if ($data_source === 'haveno') {
     if (!file_exists($HAVENO_JSON_PATH)) {
-        sleep(1);
+        // Special case: First run.
+        exec('php haveno.php');
     }
     $api_data = json_decode(file_get_contents($HAVENO_JSON_PATH), true);
     $source_name = 'Haveno.markets';
@@ -39,7 +36,8 @@ if ($data_source === 'haveno') {
 } else {
     // Default to CoinGecko
     if (!file_exists($COINGECKO_JSON_PATH)) {
-        sleep(1);
+        // Special case: First run.
+        exec('php coingecko.php');
     }
     $api_data = json_decode(file_get_contents($COINGECKO_JSON_PATH), true);
     $source_name = 'CoinGecko';

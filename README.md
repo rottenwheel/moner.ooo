@@ -98,7 +98,7 @@ For an example, see [kuno.anne.media](https://kuno.anne.media/donate/onml/).
     npm run build
     ```
 
-4. Point your web server to the public directory inside this repository.
+4. Point your web server to the public directory inside this repository, and run the `install-timers.sh` script as root.
 
 ## Configuration
 
