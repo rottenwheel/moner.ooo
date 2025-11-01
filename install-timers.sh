@@ -21,6 +21,7 @@ for ex in coingecko haveno; do
 			'Type=oneshot' \
 			'User=www-data' \
 			'Group=www-data' \
+			'Environment=MONEROOO_TICKER_UPDATE=1' \
 			"ExecStart=php $path/public/$ex.php"
 	) | tee /dev/stderr > "$unitpath/${MT_PREFIX}-$ex.service"
 
