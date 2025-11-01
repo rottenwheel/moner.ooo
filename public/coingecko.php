@@ -128,10 +128,13 @@ function processCurrencyData($availableCurrencies, $previousData, $currentTime, 
 $previousData = file_exists($currencyFile) ? fetchJson($currencyFile) : ["time" => 0];
 $output = $previousData;
 
+$updated = false;
+
 // Check if enough time has passed since the last update
-if (($currentTime - $previousData['time']) >= 268.68 && $_ENV['MONEROOO_TICKER_UPDATE'] == '1') {
+if (($currentTime - $previousData['time']) >= 268.68 && getenv('MONEROOO_TICKER_UPDATE') == '1') {
     $availableCurrencies = fetchAvailableCurrencies();
     if ($availableCurrencies !== null) {
+        $updated = true;
         $output = processCurrencyData($availableCurrencies, $previousData, $currentTime, $excludedCurrencies);
 
         // Save the data if the API call was successful
@@ -142,6 +145,13 @@ if (($currentTime - $previousData['time']) >= 268.68 && $_ENV['MONEROOO_TICKER_U
     }
 }
 
-// Output the data
-header('Content-Type: application/json');
-echo json_encode($output, JSON_PRETTY_PRINT);
+if (getenv('MONEROOO_TICKER_UPDATE') == '1') {
+    if ($updated)
+        echo 'Updated ticker at ' . $currentTime;
+    else
+        echo 'Ticker unchanged.';
+} else {
+    // Output the data
+    header('Content-Type: application/json');
+    echo json_encode($output, JSON_PRETTY_PRINT);
+}

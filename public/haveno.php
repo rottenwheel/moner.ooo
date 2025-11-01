@@ -13,8 +13,10 @@ $output = $previousData;
 
 $currentTime = time();
 
+$updated = false;
+
 // Check if five seconds have passed since the last update
-if (($currentTime - $previousData['time']) >= 5 && $_ENV['MONEROOO_TICKER_UPDATE'] == '1') {
+if (($currentTime - $previousData['time']) >= 5 && getenv('MONEROOO_TICKER_UPDATE') == '1') {
     // Fetch the ticker data from Haveno API
     $tickerUrl = $haveno_api_base_url . "/tickers";
 
@@ -60,9 +62,17 @@ if (($currentTime - $previousData['time']) >= 5 && $_ENV['MONEROOO_TICKER_UPDATE
         file_put_contents($haveno_json_path . ".bak", json_encode($tickers, JSON_PRETTY_PRINT));
 
         $output = $newData;
+        $updated = true;
     }
 }
 
-// Output the data
-header('Content-Type: application/json');
-echo json_encode($output, JSON_PRETTY_PRINT);
+if (getenv('MONEROOO_TICKER_UPDATE') == '1') {
+    if ($updated)
+        echo 'Updated ticker at ' . $currentTime;
+    else
+        echo 'Ticker unchanged.';
+} else {
+    // Output the data
+    header('Content-Type: application/json');
+    echo json_encode($output, JSON_PRETTY_PRINT);
+}
