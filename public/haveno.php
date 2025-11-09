@@ -63,14 +63,20 @@ if (($currentTime - $previousData['time']) >= 5 && getenv('MONEROOO_TICKER_UPDAT
 
         $output = $newData;
         $updated = true;
+    } else {
+        if ($tickerJson === false) {
+            echo 'Error fetching tickers: no connection' . "\n";
+        } else {
+            echo 'Error fetching tickers: ' . $tickerHttpCode . '; data: ' . $tickerJson . "\n";
+        }
     }
 }
 
 if (getenv('MONEROOO_TICKER_UPDATE') == '1') {
     if ($updated)
-        echo 'Updated ticker at ' . $currentTime;
+        echo 'Updated ticker at ' . $currentTime . "\n";
     else
-        echo 'Ticker unchanged.';
+        echo 'Ticker unchanged.' . "\n";
 } else {
     // Output the data
     header('Content-Type: application/json');

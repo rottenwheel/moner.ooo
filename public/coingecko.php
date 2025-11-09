@@ -32,6 +32,16 @@ function makeApiRequest($url)
 
     if ($httpCode == 200) {
         return json_decode($json, true);
+    } else {
+        global $errno;
+        global $errdata;
+        if ($json === false) {
+            $errno = 'NOCONN';
+            $errdata = '';
+        } else {
+            $errno = $httpCode;
+            $errdata = $json;
+        }
     }
 
     return null;
@@ -132,24 +142,31 @@ $updated = false;
 
 // Check if enough time has passed since the last update
 if (($currentTime - $previousData['time']) >= 268.68 && getenv('MONEROOO_TICKER_UPDATE') == '1') {
+    $errno = 0;
+    $errdata = '';
     $availableCurrencies = fetchAvailableCurrencies();
     if ($availableCurrencies !== null) {
-        $updated = true;
+        $errno = 0;
         $output = processCurrencyData($availableCurrencies, $previousData, $currentTime, $excludedCurrencies);
 
         // Save the data if the API call was successful
         if ($output !== null) {
+            $updated = true;
             file_put_contents($currencyFile, json_encode($output, JSON_PRETTY_PRINT));
             file_put_contents($originalFile, json_encode($output, JSON_PRETTY_PRINT));
+        } else {
+            echo "Failed to fetch tickers: {$errno}; data: {$errdata}\n";
         }
+    } else {
+        echo "Failed to fetch currencies: {$errno}; data: {$errdata}\n";
     }
 }
 
 if (getenv('MONEROOO_TICKER_UPDATE') == '1') {
     if ($updated)
-        echo 'Updated ticker at ' . $currentTime;
+        echo 'Updated ticker at ' . $currentTime . "\n";
     else
-        echo 'Ticker unchanged.';
+        echo 'Ticker unchanged' . "\n";
 } else {
     // Output the data
     header('Content-Type: application/json');
