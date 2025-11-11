@@ -33,7 +33,7 @@ for ex in coingecko haveno; do
 			'' \
 			'[Timer]' \
 			'OnBootSec=5min' \
-			'OnUnitActiveSec=5' \
+			'OnUnitActiveSec=5min' \
 			'' \
 			'[Install]' \
 			'WantedBy=timers.target'
