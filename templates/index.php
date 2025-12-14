@@ -11,6 +11,17 @@
     <meta name="description" lang="<?php echo $lang_meta; ?>" content="<?php echo $meta_description; ?>" />
     <meta name="keywords" lang="<?php echo $lang_meta; ?>" content="<?php echo $meta_keywords; ?>" />
 
+    <meta property="og:title" content="Revuo Calc" />
+    <meta property="og:description" content="XMR conversion to EUR/BTC/CHF/USD and many more. The Monero live exchange rate in many different currencies, free for everyone." />
+    <meta property="og:image" content="<?php echo $parentUrl; ?>/public/img/revuo-monero.png" />
+    <meta property="og:url" content="https://calc.revuo-xmr.com/" />
+    <meta property="og:type" content="website" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Revuo Calc" />
+    <meta name="twitter:description" content="XMR conversion to EUR/BTC/CHF/USD and many more..." />
+    <meta name="twitter:image" content="<?php echo $parentUrl; ?>/public/img/revuo-monero.png" />
+
     <meta property="og:title" content="<?php echo $page_title; ?>" />
     <meta property="og:description" content="<?php echo $meta_description; ?>" />
     <meta property="og:image" content="<?php echo $parentUrl; ?>/img/favicon-196x196.png" />
