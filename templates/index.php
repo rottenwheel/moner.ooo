@@ -20,11 +20,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Revuo Calc" />
     <meta name="twitter:description" content="XMR conversion to EUR/BTC/CHF/USD and many more..." />
-    <meta name="twitter:image" content="<?php echo $parentUrl; ?>/public/img/revuo-monero.png" />
+    <meta name="twitter:image" content="<?php echo $protocol . $_SERVER['HTTP_HOST']; ?>/public/img/revuo-monero.png" />
 
     <meta property="og:title" content="<?php echo $page_title; ?>" />
     <meta property="og:description" content="<?php echo $meta_description; ?>" />
-    <meta property="og:image" content="<?php echo $parentUrl; ?>/img/favicon-196x196.png" />
+    <meta property="og:image" content="<?php echo $protocol . $_SERVER['HTTP_HOST']; ?>/img/favicon-196x196.png" />
     <meta property="og:type" content="website" />
 
     <link rel="apple-touch-icon-precomposed" sizes="196x196" href="img/favicon-196x196.png" />
