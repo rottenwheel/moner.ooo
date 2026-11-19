@@ -73,4 +73,4 @@ $l_gel = "اللاري الجورجي";
 // More Monero links
 $getmonero = '<a class="text-white" href="https://www.getmonero.org/ar/" hreflang="ar" target="_blank" rel="external">الموقع الرسمي</a> | <a class="text-white" href="https://ccs.getmonero.org/" hreflang="en" target="_blank" rel="external">نظام التمويل الجماعي المجتمعي (CCS)</a> | <a class="text-white" href="https://www.monero.observer/resources/" hreflang="en" target="_blank" rel="external">Monero Observer</a> | <a class="text-white" href="https://www.monerotalk.live/" hreflang="en" target="_blank" rel="external">Monero Talk</a>';
 $countrymonero = '';
-$rtl = 'true';
+$rtl = true;
