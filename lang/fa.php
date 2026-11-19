@@ -85,4 +85,3 @@ $l_xdr = "حقوق برداشت ویژه";
 // More Monero links
 $getmonero = '<a class="text-white" href="https://www.monerotalk.live/" hreflang="en" target="_blank" rel="external">Monero Talk</a> | <a class="text-white" href="https://www.monero.observer/resources/" hreflang="en" target="_blank" rel="external">Monero Observer</a> | <a class="text-white" href="https://ccs.getmonero.org/" hreflang="en" target="_blank" rel="external">Community Crowdfunding System (CCS)</a> | <a class="text-white" href="https://www.getmonero.org/" hreflang="en" target="_blank" rel="external">Official website</a>';
 $countrymonero = '';
-$rtl = 'true';
