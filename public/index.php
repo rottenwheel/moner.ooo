@@ -99,6 +99,11 @@ $lang = explode(",", $lang)[0];
 $lang = explode(";", $lang)[0];
 $lang = strtolower($lang);
 
+// $lang ends up in a require path below, so only allow language-tag characters
+if (!preg_match('/^[a-z0-9-]+$/', $lang)) {
+    $lang = 'en';
+}
+
 // Aliases for different Chinese variants
 $aliases = [
     'zh' => 'zh-hans',
