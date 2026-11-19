@@ -113,7 +113,7 @@
                 <hr class="gold" />
 
                 <?php
-                if (strtolower(isset($_GET["in"]) && $_GET["in"] != $xmr_in)) {
+                if (isset($_GET["in"]) && strtoupper($_GET["in"]) != $xmr_in) {
                 ?>
                     <div class="alert alert-warning alert-dismissible fade show" role="alert">
                         <strong>Currency Changed:</strong> <?php echo htmlspecialchars($_GET["in"]); ?> is not available in this data source. Switched to <?php echo $xmr_in; ?>.
