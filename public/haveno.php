@@ -46,6 +46,11 @@ if (($currentTime - $previousData['time']) >= 5 && getenv('MONEROOO_TICKER_UPDAT
                     'lastDate' => $currentTime
                 ];
             } elseif (strpos($pair, '_xmr') !== false) {
+                // A pair without trades yet has no price to invert
+                if (floatval($ticker['last_price']) == 0) {
+                    continue;
+                }
+
                 // Extract the currency from market pair (e.g., usd_xmr -> usd)
                 $currency = substr($pair, 0, strpos($pair, '_xmr'));
 
