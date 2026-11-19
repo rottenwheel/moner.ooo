@@ -130,14 +130,15 @@ foreach ($language_files as $language_file) {
 
 $xmr_in = isset($_GET["in"]) ? strtoupper(htmlspecialchars($_GET["in"])) : 'USD';
 $xmr_amount = isset($_GET["xmr"]) ? floatval($_GET["xmr"]) : 1;
-$fiat_amount = isset($_GET["fiat"]) ? floatval($_GET["fiat"]) : '';
+$fiat_amount = isset($_GET["fiat"]) ? floatval($_GET["fiat"]) : 0;
 $conversion_direction = isset($_GET["direction"]) ? intval($_GET["direction"]) : 0;
+$exchange_rate = $exchangeRates[$xmr_in] ?? 0;
 
 if ($conversion_direction == 0) {
-    $fiat_value = $xmr_amount * $exchangeRates[$xmr_in];
+    $fiat_value = $xmr_amount * $exchange_rate;
     $xmr_value = $xmr_amount;
 } else {
-    $xmr_value = $fiat_amount / $exchangeRates[$xmr_in];
+    $xmr_value = $exchange_rate ? $fiat_amount / $exchange_rate : 0;
     $fiat_value = $fiat_amount;
 }
 
