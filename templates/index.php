@@ -19,11 +19,11 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Revuo Calc" />
     <meta name="twitter:description" content="XMR conversion to EUR/BTC/CHF/USD and many more..." />
-    <meta name="twitter:image" content="<?php echo $protocol . $_SERVER['HTTP_HOST']; ?>/img/revuo-monero.png" />
+    <meta name="twitter:image" content="<?php echo $protocol . htmlspecialchars($_SERVER['HTTP_HOST']); ?>/img/revuo-monero.png" />
 
     <meta property="og:title" content="<?php echo $page_title; ?>" />
     <meta property="og:description" content="<?php echo $meta_description; ?>" />
-    <meta property="og:image" content="<?php echo $protocol . $_SERVER['HTTP_HOST']; ?>/img/revuo-monero.png" />
+    <meta property="og:image" content="<?php echo $protocol . htmlspecialchars($_SERVER['HTTP_HOST']); ?>/img/revuo-monero.png" />
     <meta property="og:type" content="website" />
 
     <link rel="apple-touch-icon-precomposed" sizes="196x196" href="img/favicon-196x196.png" />
@@ -98,11 +98,11 @@
                             <span class="text-white">Data source:</span>
                             <br />
                             <div class="btn-group btn-group-sm data-source-btn" role="group" aria-label="Data source selection">
-                                <a href="?data_source=coingecko<?php echo isset($_GET['in']) ? '&in=' . $_GET['in'] : ''; ?>"
+                                <a href="?data_source=coingecko<?php echo isset($_GET['in']) ? '&in=' . urlencode($_GET['in']) : ''; ?>"
                                     class="btn <?php echo $data_source == 'coingecko' ? 'btn-primary' : 'btn-outline-secondary'; ?>">
                                     CoinGecko
                                 </a>
-                                <a href="?data_source=haveno<?php echo isset($_GET['in']) ? '&in=' . $_GET['in'] : ''; ?>"
+                                <a href="?data_source=haveno<?php echo isset($_GET['in']) ? '&in=' . urlencode($_GET['in']) : ''; ?>"
                                     class="btn <?php echo $data_source == 'haveno' ? 'btn-primary' : 'btn-outline-secondary'; ?>">
                                     Haveno.markets
                                 </a>
