@@ -87,7 +87,7 @@
                                     echo "</tr>";
                                     echo "<tr style=\"display:none;\">";
                                     foreach ($chunk as $currency) {
-                                        echo "<td>" . str_replace(".", ",", $exchangeRates[$currency]) . "</td>";
+                                        echo "<td>" . str_replace(".", ",", $exchangeRates[$currency] ?? '') . "</td>";
                                     }
                                     echo "</tr>";
                                 }
