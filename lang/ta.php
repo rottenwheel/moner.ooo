@@ -73,4 +73,4 @@ $l_gel = "சார்சியன் ரன்கள்";
 // More Monero links
 $getmonero = '<a class="text-white" href="https://www.getmonero.org/" hreflang="en" target="_blank" rel="external">அதிகாரப்பூர்வ வலைத்தளம்</a> | <a class="text-white" href="https://ccs.getmonero.org/" hreflang="en" target="_blank" rel="external">சமூக கூட்ட நெரிசல் அமைப்பு (CCS)</a> | <a class="text-white" href="https://www.monero.observer/resources/" hreflang="en" target="_blank" rel="external">Monero பார்வையாளர்</a> | <a class="text-white" href="https://www.monerotalk.live/" hreflang="en" target="_blank" rel="external">Monero Talk</a>';
 $countrymonero = '';
-$rtl = 'false';
+$rtl = false;
