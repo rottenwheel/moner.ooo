@@ -67,7 +67,7 @@ foreach (array_reverse($preferred_currencies) as $currency) {
 }
 
 // Check if the selected currency is available in the current data source
-$xmr_in = isset($_GET["in"]) ? strtoupper(string: htmlspecialchars($_GET["in"])) : 'EUR';
+$xmr_in = isset($_GET["in"]) ? strtoupper(string: htmlspecialchars($_GET["in"])) : 'USD';
 
 if (!in_array($xmr_in, $currencies)) {
     // If not available, fall back to a default currency that should be available in both sources
@@ -128,7 +128,6 @@ foreach ($language_files as $language_file) {
 
 // Calculation through GET parameters
 
-$xmr_in = isset($_GET["in"]) ? strtoupper(htmlspecialchars($_GET["in"])) : 'USD';
 $xmr_amount = isset($_GET["xmr"]) ? floatval($_GET["xmr"]) : 1;
 $fiat_amount = isset($_GET["fiat"]) ? floatval($_GET["fiat"]) : '';
 $conversion_direction = isset($_GET["direction"]) ? intval($_GET["direction"]) : 0;
